@@ -4,9 +4,10 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Menu } from "lucide-react";
+import { Menu, LogOut, LogIn } from "lucide-react";
 import { Logo } from "@/components/logo";
 import { cn } from "@/lib/utils";
+import { useAuth } from "@/hooks/use-auth";
 
 const navLinks = [
   { href: "/", label: "Home" },
@@ -18,6 +19,43 @@ const navLinks = [
 
 export function Header() {
   const pathname = usePathname();
+  const { user, signOut, loading } = useAuth();
+
+  const AuthButton = () => {
+    if (loading) {
+      return <Button variant="ghost" size="icon" disabled className="md:w-24 justify-start"></Button>;
+    }
+    if (user) {
+      return (
+        <Button onClick={signOut} variant="ghost">
+          <LogOut className="mr-2" /> Logout
+        </Button>
+      );
+    }
+    return (
+      <Button asChild variant="ghost">
+        <Link href="/login"><LogIn className="mr-2" /> Login</Link>
+      </Button>
+    );
+  };
+  
+  const AuthButtonMobile = () => {
+    if (loading) {
+        return <Button variant="ghost" size="lg" disabled className="w-full"></Button>;
+    }
+    if (user) {
+      return (
+        <Button onClick={signOut} size="lg" className="w-full">
+          <LogOut className="mr-2" /> Logout
+        </Button>
+      );
+    }
+    return (
+      <Button asChild size="lg" className="w-full">
+        <Link href="/login"><LogIn className="mr-2" /> Login</Link>
+      </Button>
+    );
+  }
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -39,10 +77,11 @@ export function Header() {
             </Link>
           ))}
         </nav>
-        <div className="hidden md:block">
+        <div className="hidden md:flex items-center gap-2">
           <Button asChild className="bg-primary hover:bg-primary/90 text-primary-foreground">
             <Link href="/book">Book a Session</Link>
           </Button>
+          <AuthButton />
         </div>
         <div className="md:hidden">
           <Sheet>
@@ -74,6 +113,7 @@ export function Header() {
                 <Button asChild size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground">
                   <Link href="/book">Book a Session</Link>
                 </Button>
+                <AuthButtonMobile />
               </div>
             </SheetContent>
           </Sheet>
