@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, { createContext, useContext, useEffect, useState } from "react";
@@ -7,15 +8,13 @@ import { doc, setDoc, getDoc } from "firebase/firestore";
 import { useRouter } from "next/navigation";
 import { useToast } from "./use-toast";
 
-// Add your admin UID here
-const ADMIN_UID = "ADD_YOUR_ADMIN_UID_HERE";
-
 interface AuthContextType {
   user: User | null;
   loading: boolean;
   isAdmin: boolean;
   signInWithGoogle: () => Promise<void>;
   createUserWithEmail: (email: string, pass: string, username: string, telephone: string, location: string) => Promise<void>;
+  createAdminUserWithEmail: (email: string, pass: string, username: string, telephone: string, location: string) => Promise<void>;
   signInWithEmail: (email: string, pass: string) => Promise<void>;
   signOut: () => Promise<void>;
 }
@@ -26,6 +25,7 @@ const AuthContext = createContext<AuthContextType>({
   isAdmin: false,
   signInWithGoogle: async () => {},
   createUserWithEmail: async () => {},
+  createAdminUserWithEmail: async () => {},
   signInWithEmail: async () => {},
   signOut: async () => {},
 });
@@ -45,7 +45,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         if (userDoc.exists() && userDoc.data().role === 'admin') {
           setIsAdmin(true);
         } else {
-            setIsAdmin(user?.uid === ADMIN_UID);
+            setIsAdmin(false);
         }
         setUser(user);
       } else {
@@ -58,8 +58,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     return () => unsubscribe();
   }, []);
 
-  const handleAuthSuccess = () => {
-    router.push("/book");
+  const handleAuthSuccess = (role: 'admin' | 'client') => {
+    if (role === 'admin') {
+      router.push("/admin");
+    } else {
+      router.push("/book");
+    }
   };
 
   const handleAuthError = (error: any) => {
@@ -89,7 +93,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           createdAt: new Date()
         });
       }
-      handleAuthSuccess();
+      handleAuthSuccess('client');
     } catch (error) {
       handleAuthError(error);
     } finally {
@@ -97,7 +101,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
-  const createUserWithEmail = async (email: string, pass: string, username: string, telephone: string, location: string) => {
+  const createUser = async (email: string, pass: string, username: string, telephone: string, location: string, role: 'client' | 'admin') => {
     setLoading(true);
     try {
         const userCredential = await createUserWithEmailAndPassword(auth, email, pass);
@@ -110,23 +114,36 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             username,
             telephone,
             location,
-            role: "client", // Default role
+            role: role,
             createdAt: new Date(),
         });
 
-        handleAuthSuccess();
+        handleAuthSuccess(role);
     } catch(error) {
         handleAuthError(error);
     } finally {
         setLoading(false);
     }
   }
+  
+  const createUserWithEmail = (email: string, pass: string, username: string, telephone: string, location: string) => {
+    return createUser(email, pass, username, telephone, location, 'client');
+  }
+
+  const createAdminUserWithEmail = (email: string, pass: string, username: string, telephone: string, location: string) => {
+    return createUser(email, pass, username, telephone, location, 'admin');
+  }
+
 
   const signInWithEmail = async (email: string, pass: string) => {
     setLoading(true);
     try {
-        await signInWithEmailAndPassword(auth, email, pass);
-        handleAuthSuccess();
+        const userCredential = await signInWithEmailAndPassword(auth, email, pass);
+        const user = userCredential.user;
+        const userDocRef = doc(db, "users", user.uid);
+        const userDoc = await getDoc(userDocRef);
+        const role = userDoc.exists() && userDoc.data().role === 'admin' ? 'admin' : 'client';
+        handleAuthSuccess(role);
     } catch(error) {
         handleAuthError(error);
     } finally {
@@ -147,7 +164,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   return (
-    <AuthContext.Provider value={{ user, loading, isAdmin, signInWithGoogle, createUserWithEmail, signInWithEmail, signOut }}>
+    <AuthContext.Provider value={{ user, loading, isAdmin, signInWithGoogle, createUserWithEmail, createAdminUserWithEmail, signInWithEmail, signOut }}>
       {children}
     </AuthContext.Provider>
   );

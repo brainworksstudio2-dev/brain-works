@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useAuth } from "@/hooks/use-auth";
@@ -5,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { Loader } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ReceiptForm } from "./receipt-form";
 
 export default function AdminPage() {
