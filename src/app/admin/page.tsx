@@ -8,6 +8,7 @@ import { Loader } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ReceiptForm } from "./receipt-form";
+import { Logo } from "@/components/logo";
 
 export default function AdminPage() {
   const { user, isAdmin, loading } = useAuth();
@@ -37,6 +38,9 @@ export default function AdminPage() {
     <div className="container mx-auto px-4 py-16">
        <div className="max-w-4xl mx-auto">
           <div className="text-center mb-12">
+              <div className="flex justify-center mb-4">
+                <Logo />
+              </div>
               <h1 className="text-4xl md:text-5xl font-bold text-primary">Admin Dashboard</h1>
               <p className="text-lg text-muted-foreground mt-4">
                   Welcome, Admin. Manage your receipts here.
