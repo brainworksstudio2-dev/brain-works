@@ -17,19 +17,22 @@ export default function ContactPage() {
         </p>
       </div>
 
-      <div className="max-w-md mx-auto">
-          <div className="space-y-4">
+      <div className="max-w-md mx-auto bg-card p-8 rounded-lg shadow-md">
+          <div className="space-y-6">
               <div className="flex items-center gap-4">
                 <Mail className="size-5 text-primary" />
-                <a href="mailto:contact@brainworks.com" className="hover:underline">contact@brainworks.com</a>
+                <a href="mailto:brainworksstudio2@gmail.com" className="hover:underline">brainworksstudio2@gmail.com</a>
               </div>
               <div className="flex items-center gap-4">
                 <Phone className="size-5 text-primary" />
-                <a href="tel:+1234567890" className="hover:underline">+1 (234) 567-890</a>
+                <div className="flex flex-col">
+                    <a href="tel:0242403450" className="hover:underline">024 240 3450</a>
+                    <a href="tel:0531125952" className="hover:underline">053 112 5952</a>
+                </div>
               </div>
               <div className="flex items-start gap-4">
                 <MapPin className="size-5 text-primary mt-1" />
-                <span>123 Photo Lane, Art City, 54321</span>
+                <span>Amasaman</span>
               </div>
           </div>
       </div>
