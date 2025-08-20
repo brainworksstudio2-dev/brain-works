@@ -56,7 +56,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const provider = new GoogleAuthProvider();
     setLoading(true);
     try {
-      await setPersistence(auth, browserLocalPersistence);
       await signInWithPopup(auth, provider);
       handleAuthSuccess();
     } catch (error) {
@@ -69,7 +68,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const createUserWithEmail = async (email: string, pass: string) => {
     setLoading(true);
     try {
-        await setPersistence(auth, browserLocalPersistence);
         await createUserWithEmailAndPassword(auth, email, pass);
         handleAuthSuccess();
     } catch(error) {
@@ -82,7 +80,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const signInWithEmail = async (email: string, pass: string) => {
     setLoading(true);
     try {
-        await setPersistence(auth, browserLocalPersistence);
         await signInWithEmailAndPassword(auth, email, pass);
         handleAuthSuccess();
     } catch(error) {
