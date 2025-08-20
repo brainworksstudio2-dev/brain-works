@@ -13,6 +13,10 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
-const auth = getAuth(app);
+const auth = getAuth(app, {
+  persistence: undefined,
+  authDomain: 'brain-works-egf0a.firebaseapp.com',
+});
+
 
 export { app, auth };
