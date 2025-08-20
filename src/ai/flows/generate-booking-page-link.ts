@@ -35,7 +35,7 @@ const prompt = ai.definePrompt({
   name: 'generateBookingPageLinkPrompt',
   input: {schema: GenerateBookingPageLinkInputSchema},
   output: {schema: GenerateBookingPageLinkOutputSchema},
-  prompt: `You are a booking link generator for Brain Works Studio.
+  prompt: `You are a booking link generator for Brain Works.
 
   Based on the client information provided, generate a unique, shareable booking page link.
   If the client is a returning client (isReturningClient is true), the booking should be automatically confirmed, and the confirmation message should reflect this.
@@ -59,7 +59,7 @@ const prompt = ai.definePrompt({
   Message: Looking forward to capturing our special day!
   Is Returning Client: false
 
-  bookingPageLink: https://brainworksstudio.com/bookings/john-doe-wedding-20240720-unconfirmed
+  bookingPageLink: https://brainworks.com/bookings/john-doe-wedding-20240720-unconfirmed
   confirmationMessage: Booking requires confirmation via the generated link.
 
   Client Name: Jane Smith
@@ -70,10 +70,10 @@ const prompt = ai.definePrompt({
   Message: null
   Is Returning Client: true
 
-  bookingPageLink: https://brainworksstudio.com/bookings/jane-smith-portrait-20240615-confirmed
+  bookingPageLink: https://brainworks.com/bookings/jane-smith-portrait-20240615-confirmed
   confirmationMessage: Booking automatically confirmed for returning client.
 
-  The base URL for all booking links is https://brainworksstudio.com/bookings/.
+  The base URL for all booking links is https://brainworks.com/bookings/.
   Include the client's name, service type, and event date in the generated link, along with a status of 'confirmed' or 'unconfirmed'.
   The confirmation message must be succinct.
   `, 

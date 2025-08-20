@@ -11,7 +11,7 @@ export function Footer() {
             <Link href="/">
                 <Logo />
             </Link>
-            <p className="text-sm mt-2 text-muted-foreground">© {new Date().getFullYear()} Brain Works Studio. All rights reserved.</p>
+            <p className="text-sm mt-2 text-muted-foreground">© {new Date().getFullYear()} Brain Works. All rights reserved.</p>
           </div>
           <div className="flex items-center space-x-4">
             <Link href="#" className="text-muted-foreground hover:text-primary transition-colors">

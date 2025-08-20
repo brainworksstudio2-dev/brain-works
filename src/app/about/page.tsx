@@ -3,8 +3,8 @@ import type { Metadata } from "next";
 import { Users, Camera, Heart } from "lucide-react";
 
 export const metadata: Metadata = {
-    title: "About Us - Brain Works Studio",
-    description: "Learn more about the team and passion behind Brain Works Studio.",
+    title: "About Us - Brain Works",
+    description: "Learn more about the team and passion behind Brain Works.",
 };
 
 const teamMembers = [
@@ -29,14 +29,14 @@ export default function AboutPage() {
         <div className="bg-background">
             <section className="container mx-auto px-4 py-16">
                 <div className="text-center mb-12">
-                    <h1 className="text-4xl md:text-5xl font-bold text-primary">About Brain Works Studio</h1>
+                    <h1 className="text-4xl md:text-5xl font-bold text-primary">About Brain Works</h1>
                     <p className="text-lg text-muted-foreground mt-4 max-w-3xl mx-auto">
                         We are a collective of passionate photographers and videographers dedicated to capturing life's most precious moments with creativity and heart.
                     </p>
                 </div>
 
                 <div className="relative mb-16">
-                    <Image src="https://placehold.co/1200x600.png" alt="Brain Works Studio team working" data-ai-hint="photography team" width={1200} height={600} className="w-full h-auto rounded-lg shadow-lg" />
+                    <Image src="https://placehold.co/1200x600.png" alt="Brain Works team working" data-ai-hint="photography team" width={1200} height={600} className="w-full h-auto rounded-lg shadow-lg" />
                     <div className="absolute inset-0 bg-black/30 rounded-lg"></div>
                 </div>
 

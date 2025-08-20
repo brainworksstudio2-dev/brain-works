@@ -8,8 +8,8 @@ import Link from "next/link";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Contact Us - Brain Works Studio",
-  description: "Get in touch with Brain Works studio for your photography and videography needs.",
+  title: "Contact Us - Brain Works",
+  description: "Get in touch with Brain Works for your photography and videography needs.",
 };
 
 export default function ContactPage() {
@@ -62,7 +62,7 @@ export default function ContactPage() {
             <CardContent className="space-y-4">
               <div className="flex items-center gap-4">
                 <Mail className="size-5 text-primary" />
-                <a href="mailto:contact@brainworksstudio.com" className="hover:underline">contact@brainworksstudio.com</a>
+                <a href="mailto:contact@brainworks.com" className="hover:underline">contact@brainworks.com</a>
               </div>
               <div className="flex items-center gap-4">
                 <Phone className="size-5 text-primary" />
@@ -78,7 +78,7 @@ export default function ContactPage() {
           <Card>
             <CardHeader>
                 <CardTitle>Follow Us</CardTitle>
-            </CardHeader>
+            </Header>
             <CardContent className="flex items-center space-x-4">
                 <Link href="#" className="text-muted-foreground hover:text-primary transition-colors"><Instagram className="h-7 w-7" /></Link>
                 <Link href="#" className="text-muted-foreground hover:text-primary transition-colors"><Facebook className="h-7 w-7" /></Link>
