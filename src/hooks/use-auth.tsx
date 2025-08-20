@@ -2,7 +2,8 @@
 
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { User, onAuthStateChanged, signOut as firebaseSignOut, GoogleAuthProvider, signInWithPopup, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "@/lib/firebase";
+import { auth, db } from "@/lib/firebase";
+import { doc, setDoc, getDoc } from "firebase/firestore";
 import { useRouter } from "next/navigation";
 import { useToast } from "./use-toast";
 
@@ -14,7 +15,7 @@ interface AuthContextType {
   loading: boolean;
   isAdmin: boolean;
   signInWithGoogle: () => Promise<void>;
-  createUserWithEmail: (email: string, pass: string) => Promise<void>;
+  createUserWithEmail: (email: string, pass: string, username: string, telephone: string, location: string) => Promise<void>;
   signInWithEmail: (email: string, pass: string) => Promise<void>;
   signOut: () => Promise<void>;
 }
@@ -37,9 +38,20 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const { toast } = useToast();
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      setUser(user);
-      setIsAdmin(user?.uid === ADMIN_UID);
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        const userDocRef = doc(db, "users", user.uid);
+        const userDoc = await getDoc(userDocRef);
+        if (userDoc.exists() && userDoc.data().role === 'admin') {
+          setIsAdmin(true);
+        } else {
+            setIsAdmin(user?.uid === ADMIN_UID);
+        }
+        setUser(user);
+      } else {
+        setUser(null);
+        setIsAdmin(false);
+      }
       setLoading(false);
     });
 
@@ -63,7 +75,20 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const provider = new GoogleAuthProvider();
     setLoading(true);
     try {
-      await signInWithPopup(auth, provider);
+      const result = await signInWithPopup(auth, provider);
+      const user = result.user;
+      // Check if user exists in Firestore, if not, create them
+      const userDocRef = doc(db, "users", user.uid);
+      const userDoc = await getDoc(userDocRef);
+      if (!userDoc.exists()) {
+        await setDoc(userDocRef, {
+          uid: user.uid,
+          email: user.email,
+          username: user.displayName,
+          role: "client",
+          createdAt: new Date()
+        });
+      }
       handleAuthSuccess();
     } catch (error) {
       handleAuthError(error);
@@ -72,10 +97,23 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
-  const createUserWithEmail = async (email: string, pass: string) => {
+  const createUserWithEmail = async (email: string, pass: string, username: string, telephone: string, location: string) => {
     setLoading(true);
     try {
-        await createUserWithEmailAndPassword(auth, email, pass);
+        const userCredential = await createUserWithEmailAndPassword(auth, email, pass);
+        const user = userCredential.user;
+        
+        // Save additional user info to Firestore
+        await setDoc(doc(db, "users", user.uid), {
+            uid: user.uid,
+            email,
+            username,
+            telephone,
+            location,
+            role: "client", // Default role
+            createdAt: new Date(),
+        });
+
         handleAuthSuccess();
     } catch(error) {
         handleAuthError(error);
