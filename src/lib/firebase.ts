@@ -1,3 +1,4 @@
+
 'use client';
 import { initializeApp, getApps, getApp, FirebaseApp } from 'firebase/app';
 import { getAuth, Auth } from 'firebase/auth';
@@ -13,30 +14,26 @@ const firebaseConfig = {
 };
 
 // Validate that all required Firebase config values are present
-const missingConfig = Object.entries(firebaseConfig).find(([key, value]) => !value);
+const missingConfig = Object.entries(firebaseConfig).find(([, value]) => !value);
 
-if (missingConfig) {
-    console.error(`Missing Firebase config: ${missingConfig[0]}`);
+if (missingConfig && typeof window !== 'undefined') {
+    console.error(`Missing Firebase config. Ensure all NEXT_PUBLIC_FIREBASE_ variables are set in your .env file.`);
 }
 
-// Initialize Firebase for client-side
+// Initialize Firebase for client-side only when config is valid
 let app: FirebaseApp;
-if (typeof window !== 'undefined' && !missingConfig) {
-  app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
-}
-
 let auth: Auth;
 let db: Firestore;
 
-// Ensure Firebase services are only initialized on the client where the app has been initialized
-if (typeof window !== 'undefined' && !getApps().length && !missingConfig) {
-    initializeApp(firebaseConfig);
-}
-if (typeof window !== 'undefined') {
+if (typeof window !== 'undefined' && !missingConfig) {
+  if (!getApps().length) {
+    app = initializeApp(firebaseConfig);
+  } else {
     app = getApp();
-    auth = getAuth(app);
-    db = getFirestore(app);
+  }
+  auth = getAuth(app);
+  db = getFirestore(app);
 }
 
-
+// @ts-ignore
 export { app, auth, db };
