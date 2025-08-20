@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Menu, LogOut, LogIn } from "lucide-react";
+import { Menu, LogOut, LogIn, Shield } from "lucide-react";
 import { Logo } from "@/components/logo";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/hooks/use-auth";
@@ -19,7 +19,7 @@ const navLinks = [
 
 export function Header() {
   const pathname = usePathname();
-  const { user, signOut, loading } = useAuth();
+  const { user, signOut, loading, isAdmin } = useAuth();
 
   const AuthButton = () => {
     if (loading) {
@@ -76,6 +76,17 @@ export function Header() {
               {link.label}
             </Link>
           ))}
+          {isAdmin && (
+            <Link
+              href="/admin"
+              className={cn(
+                "text-sm font-medium transition-colors hover:text-primary",
+                pathname === "/admin" ? "text-primary" : "text-muted-foreground"
+              )}
+            >
+              <span className="flex items-center gap-1"><Shield className="size-4" /> Admin</span>
+            </Link>
+          )}
         </nav>
         <div className="hidden md:flex items-center gap-2">
           <Button asChild className="bg-primary hover:bg-primary/90 text-primary-foreground">
@@ -109,6 +120,17 @@ export function Header() {
                       {link.label}
                     </Link>
                   ))}
+                   {isAdmin && (
+                    <Link
+                      href="/admin"
+                      className={cn(
+                        "text-lg font-medium transition-colors hover:text-primary",
+                        pathname === "/admin" ? "text-primary" : "text-muted-foreground"
+                      )}
+                    >
+                     <span className="flex items-center gap-1"><Shield className="size-5" /> Admin</span>
+                    </Link>
+                  )}
                 </nav>
                 <Button asChild size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground">
                   <Link href="/book">Book a Session</Link>

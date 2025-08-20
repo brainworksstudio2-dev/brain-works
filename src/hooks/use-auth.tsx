@@ -6,9 +6,13 @@ import { auth } from "@/lib/firebase";
 import { useRouter } from "next/navigation";
 import { useToast } from "./use-toast";
 
+// Add your admin UID here
+const ADMIN_UID = "ADD_YOUR_ADMIN_UID_HERE";
+
 interface AuthContextType {
   user: User | null;
   loading: boolean;
+  isAdmin: boolean;
   signInWithGoogle: () => Promise<void>;
   createUserWithEmail: (email: string, pass: string) => Promise<void>;
   signInWithEmail: (email: string, pass: string) => Promise<void>;
@@ -18,6 +22,7 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType>({
   user: null,
   loading: true,
+  isAdmin: false,
   signInWithGoogle: async () => {},
   createUserWithEmail: async () => {},
   signInWithEmail: async () => {},
@@ -27,12 +32,14 @@ const AuthContext = createContext<AuthContextType>({
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+  const [isAdmin, setIsAdmin] = useState(false);
   const router = useRouter();
   const { toast } = useToast();
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setUser(user);
+      setIsAdmin(user?.uid === ADMIN_UID);
       setLoading(false);
     });
 
@@ -102,7 +109,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   return (
-    <AuthContext.Provider value={{ user, loading, signInWithGoogle, createUserWithEmail, signInWithEmail, signOut }}>
+    <AuthContext.Provider value={{ user, loading, isAdmin, signInWithGoogle, createUserWithEmail, signInWithEmail, signOut }}>
       {children}
     </AuthContext.Provider>
   );

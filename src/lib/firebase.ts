@@ -1,6 +1,7 @@
 'use client';
 import { initializeApp, getApps, getApp, FirebaseApp } from 'firebase/app';
 import { getAuth, Auth } from 'firebase/auth';
+import { getFirestore, Firestore } from 'firebase/firestore';
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -14,10 +15,12 @@ const firebaseConfig = {
 // Initialize Firebase
 const app: FirebaseApp = !getApps().length ? initializeApp(firebaseConfig) : getApp();
 let auth: Auth;
+let db: Firestore;
 
-// Ensure Auth is only initialized on the client
+// Ensure Firebase services are only initialized on the client
 if (typeof window !== 'undefined') {
   auth = getAuth(app);
+  db = getFirestore(app);
 }
 
-export { app, auth };
+export { app, auth, db };
