@@ -32,7 +32,14 @@ export default function ContactPage() {
               </div>
               <div className="flex items-start gap-4">
                 <MapPin className="size-5 text-primary mt-1" />
-                <span>Amasaman</span>
+                <a 
+                  href="https://www.google.com/maps/search/?api=1&query=Amasaman" 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className="hover:underline"
+                >
+                  Amasaman
+                </a>
               </div>
           </div>
       </div>
