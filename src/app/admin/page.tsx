@@ -7,7 +7,7 @@ import { useEffect } from "react";
 import { Loader } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ReceiptForm } from "./receipt-form";
+import { InvoiceForm } from "./invoice-form";
 import { Logo } from "@/components/logo";
 
 export default function AdminPage() {
@@ -43,33 +43,33 @@ export default function AdminPage() {
               </div>
               <h1 className="text-4xl md:text-5xl font-bold text-primary">Admin Dashboard</h1>
               <p className="text-lg text-muted-foreground mt-4">
-                  Welcome, Admin. Manage your receipts here.
+                  Welcome, Admin. Manage your invoices here.
               </p>
           </div>
           <Tabs defaultValue="create" className="w-full">
             <TabsList className="grid w-full grid-cols-2 mb-8">
-              <TabsTrigger value="create">Create Receipt</TabsTrigger>
+              <TabsTrigger value="create">Create Invoice</TabsTrigger>
               <TabsTrigger value="history">History</TabsTrigger>
             </TabsList>
             <TabsContent value="create">
               <Card>
                 <CardHeader>
-                  <CardTitle>New Receipt</CardTitle>
-                  <CardDescription>Fill out the form below to generate a new receipt.</CardDescription>
+                  <CardTitle>New Invoice</CardTitle>
+                  <CardDescription>Fill out the form below to generate a new invoice.</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <ReceiptForm />
+                  <InvoiceForm />
                 </CardContent>
               </Card>
             </TabsContent>
             <TabsContent value="history">
               <Card>
                 <CardHeader>
-                  <CardTitle>Receipt History</CardTitle>
-                  <CardDescription>View and manage all past receipts.</CardDescription>
+                  <CardTitle>Invoice History</CardTitle>
+                  <CardDescription>View and manage all past invoices.</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <p>Receipt history will be displayed here in the next step.</p>
+                  <p>Invoice history will be displayed here in a future step.</p>
                 </CardContent>
               </Card>
             </TabsContent>

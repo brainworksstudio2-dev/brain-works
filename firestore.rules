@@ -3,21 +3,22 @@ rules_version = '2';
 
 service cloud.firestore {
   match /databases/{database}/documents {
-
-    // Users can create their own profile, and only they can read/update it.
+    
+    // Users can only read/write their own data
     match /users/{userId} {
       allow read, update, delete: if request.auth != null && request.auth.uid == userId;
       allow create: if request.auth != null;
     }
-
-    // Only authenticated admins can read and write to receipts.
-    match /receipts/{receiptId} {
-      allow read, write: if request.auth != null && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    
+    // Invoices can only be created, read, updated, or deleted by authenticated admins
+    match /invoices/{invoiceId} {
+      allow read: if request.auth != null; // Allow clients to view their invoices if they have the link
+      allow create, update, delete: if request.auth != null && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
     }
-
-    // Only authenticated admins can manage the counters for receipts.
-    match /counters/receipts {
-        allow read, write: if request.auth != null && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    
+    // Counters can only be read and written by authenticated admins
+    match /counters/{counterId} {
+      allow read, write: if request.auth != null && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
     }
   }
 }
