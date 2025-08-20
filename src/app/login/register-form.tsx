@@ -13,12 +13,11 @@ import { Separator } from "@/components/ui/separator";
 
 const formSchema = z.object({
   email: z.string().email({ message: "Please enter a valid email." }),
-  password: z.string().min(1, { message: "Password is required." }),
+  password: z.string().min(6, { message: "Password must be at least 6 characters." }),
 });
 
-
-export function LoginForm() {
-    const { signInWithGoogle, signInWithEmail, loading } = useAuth();
+export function RegisterForm() {
+    const { signInWithGoogle, createUserWithEmail, loading } = useAuth();
     
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -29,14 +28,14 @@ export function LoginForm() {
     });
 
     const onSubmit = (data: z.infer<typeof formSchema>) => {
-        signInWithEmail(data.email, data.password);
+        createUserWithEmail(data.email, data.password);
     };
 
     return (
         <Card>
             <CardHeader>
-                <CardTitle>Sign In</CardTitle>
-                <CardDescription>Choose your preferred sign-in method.</CardDescription>
+                <CardTitle>Register</CardTitle>
+                <CardDescription>Choose your preferred registration method.</CardDescription>
             </CardHeader>
             <CardContent>
                 <Form {...form}>
@@ -69,7 +68,7 @@ export function LoginForm() {
                         />
                         <Button type="submit" disabled={loading} className="w-full">
                             {loading ? <Loader className="mr-2 h-4 w-4 animate-spin" /> : null}
-                            Sign in with Email
+                            Register with Email
                         </Button>
                     </form>
                 </Form>
@@ -90,7 +89,7 @@ export function LoginForm() {
                     ) : (
                         <svg className="mr-2 h-4 w-4" aria-hidden="true" focusable="false" data-prefix="fab" data-icon="google" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 488 512"><path fill="currentColor" d="M488 261.8C488 403.3 381.4 512 244 512S0 403.3 0 261.8S106.6 11.8 244 11.8S488 120.3 488 261.8zM97.2 261.8c0 83.4 67.2 150.9 149.9 150.9S397 345.2 397 261.8s-67.2-150.9-149.9-150.9S97.2 178.4 97.2 261.8zM259.9 161.8h-22.3v30.4h-30.4v22.3h30.4v30.4h22.3v-30.4h30.4v-22.3h-30.4v-30.4z"></path></svg>
                     )}
-                    Sign in with Google
+                    Continue with Google
                 </Button>
             </CardContent>
         </Card>
