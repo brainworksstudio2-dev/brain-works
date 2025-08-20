@@ -4,8 +4,8 @@ import Image from "next/image";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Our Services - Brain Frame",
-  description: "Explore the photography and videography services offered by Brain Frame studio.",
+  title: "Our Services - Brain Works Studio",
+  description: "Explore the photography and videography services offered by Brain Works studio.",
 };
 
 const services = [

@@ -64,7 +64,7 @@ export default function Home() {
           <CarouselNext className="absolute right-4 top-1/2 -translate-y-1/2 z-10 hidden md:flex" />
         </Carousel>
         <div className="absolute inset-0 bg-black/50 flex flex-col items-center justify-center text-center text-white p-4">
-          <h1 className="text-4xl md:text-6xl font-bold tracking-tight text-accent">Brain Frame Studio</h1>
+          <h1 className="text-4xl md:text-6xl font-bold tracking-tight text-accent">Brain Works Studio</h1>
           <p className="mt-4 text-lg md:text-xl max-w-2xl">Capturing Life's Moments, One Frame at a Time.</p>
           <div className="mt-8 flex flex-col sm:flex-row gap-4">
             <Button asChild size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground">

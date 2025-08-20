@@ -13,8 +13,8 @@ const ptSans = PT_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "Brain Frame - Photography & Videography",
-  description: "Modern, responsive photography website for Brain Frame Studio.",
+  title: "Brain Works Studio - Photography & Videography",
+  description: "Modern, responsive photography website for Brain Works Studio.",
 };
 
 export default function RootLayout({

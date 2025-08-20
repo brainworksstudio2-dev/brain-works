@@ -2,8 +2,8 @@ import { BookingForm } from "./booking-form";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Book a Session - Brain Frame",
-  description: "Schedule your photography or videography session with Brain Frame studio.",
+  title: "Book a Session - Brain Works Studio",
+  description: "Schedule your photography or videography session with Brain Works studio.",
 };
 
 export default function BookPage() {

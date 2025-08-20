@@ -23,7 +23,7 @@ const portfolioData = {
     { src: "https://placehold.co/600x800.png", alt: "Professional headshot", dataAiHint: "professional headshot" },
     { src: "https://placehold.co/800x600.png", alt: "Family portrait outdoors", dataAiHint: "family portrait" },
     { src: "https://placehold.co/600x800.png", alt: "Creative artist portrait", dataAiHint: "artist portrait" },
-    { src:https://placehold.co/600x800.png", alt: "Child portrait", dataAiHint: "child portrait" },
+    { src: "https://placehold.co/600x800.png", alt: "Child portrait", dataAiHint: "child portrait" },
   ],
   corporate: [
     { src: "https://placehold.co/800x600.png", alt: "Modern office space", dataAiHint: "modern office" },

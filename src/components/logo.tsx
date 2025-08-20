@@ -25,7 +25,7 @@ export function Logo({ className }: { className?: string }) {
           fill="currentColor"
         />
       </svg>
-      <span className="text-xl font-bold text-foreground">Brain Frame</span>
+      <span className="text-xl font-bold text-foreground">Brain Works Studio</span>
     </div>
   );
 }
