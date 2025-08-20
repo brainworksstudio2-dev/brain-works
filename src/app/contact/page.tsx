@@ -1,3 +1,4 @@
+
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -6,6 +7,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Instagram, Facebook, Youtube, Mail, Phone, MapPin } from "lucide-react";
 import Link from "next/link";
 import type { Metadata } from "next";
+import Image from "next/image";
 
 export const metadata: Metadata = {
   title: "Contact Us - Brain Works",
@@ -87,15 +89,14 @@ export default function ContactPage() {
           </Card>
 
           <div className="aspect-video bg-muted rounded-lg overflow-hidden">
-            <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d387191.0361214723!2d-74.30932824707154!3d40.69753995325883!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c24fa5d33f083b%3A0xc80b8f06e177fe62!2sNew%20York%2C%20NY%2C%20USA!5e0!3m2!1sen!2s!4v1622010425287!5m2!1sen!2s"
-                width="100%"
-                height="100%"
-                style={{ border: 0 }}
-                allowFullScreen={true}
-                loading="lazy"
-                title="Google Maps location of the studio"
-            ></iframe>
+            <Image 
+              src="https://placehold.co/600x400.png"
+              alt="Studio location map"
+              data-ai-hint="map location"
+              width={600}
+              height={400}
+              className="w-full h-full object-cover"
+            />
           </div>
         </div>
       </div>
