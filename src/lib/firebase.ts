@@ -1,6 +1,6 @@
 'use client';
 import { initializeApp, getApps, getApp } from 'firebase/app';
-import { getAuth, browserLocalPersistence, initializeAuth } from 'firebase/auth';
+import { getAuth } from 'firebase/auth';
 
 const firebaseConfig = {
   projectId: 'brain-works-egf0a',
@@ -13,14 +13,6 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
-
-// Use initializeAuth to handle persistence in a way that is compatible with Next.js
-// This ensures that Firebase Auth is only initialized on the client side.
-const auth = typeof window !== 'undefined' ? 
-  initializeAuth(app, {
-    persistence: browserLocalPersistence,
-  }) : 
-  getAuth(app);
-
+const auth = getAuth(app);
 
 export { app, auth };
