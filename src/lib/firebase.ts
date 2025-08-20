@@ -1,6 +1,6 @@
 'use client';
-import { initializeApp, getApps, getApp } from 'firebase/app';
-import { getAuth } from 'firebase/auth';
+import { initializeApp, getApps, getApp, FirebaseApp } from 'firebase/app';
+import { getAuth, Auth } from 'firebase/auth';
 
 const firebaseConfig = {
   projectId: 'brain-works-egf0a',
@@ -12,7 +12,12 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
-const auth = getAuth(app);
+const app: FirebaseApp = !getApps().length ? initializeApp(firebaseConfig) : getApp();
+let auth: Auth;
+
+// Ensure Auth is only initialized on the client
+if (typeof window !== 'undefined') {
+  auth = getAuth(app);
+}
 
 export { app, auth };
