@@ -15,6 +15,7 @@ const firebaseConfig = {
 const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
 
 // Use initializeAuth to handle persistence in a way that is compatible with Next.js
+// This ensures that Firebase Auth is only initialized on the client side.
 const auth = typeof window !== 'undefined' ? 
   initializeAuth(app, {
     persistence: browserLocalPersistence,
