@@ -4,6 +4,7 @@
 import { z } from "zod";
 import { db } from "@/lib/server";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
+import { Resend } from 'resend';
 
 // Updated schema to expect a string date in 'yyyy-MM-dd' format
 const BookingSchema = z.object({
@@ -36,6 +37,7 @@ export async function createBooking(
   prevState: State,
   formData: FormData
 ): Promise<State> {
+  const resend = new Resend(process.env.RESEND_API_KEY);
 
   const validatedFields = BookingSchema.safeParse({
     clientName: formData.get("clientName"),
@@ -64,18 +66,33 @@ export async function createBooking(
       createdAt: serverTimestamp(),
       status: 'Pending', // Default status for new client bookings
     });
+
+    // Send confirmation email
+    await resend.emails.send({
+      from: 'noreply@brainworks.dev',
+      to: validatedFields.data.email,
+      subject: 'Your Booking is Confirmed!',
+      html: `
+        <h1>Booking Confirmation</h1>
+        <p>Hello ${validatedFields.data.clientName},</p>
+        <p>Thank you for booking with Brain Works. Your session for <strong>${validatedFields.data.serviceType}</strong> on <strong>${validatedFields.data.eventDate}</strong> has been successfully submitted.</p>
+        <p>Your unique booking code is: <strong>${bookingCode}</strong></p>
+        <p>We will contact you shortly to finalize the details.</p>
+        <p>Best regards,<br/>The Brain Works Team</p>
+      `,
+    });
     
     return {
         success: true,
-        message: "Your booking request has been submitted successfully! We will get back to you shortly.",
+        message: "Your booking request has been submitted successfully! A confirmation email has been sent.",
         bookingCode: bookingCode,
     };
 
   } catch (error) {
-    console.error("Error creating booking:", error);
+    console.error("Error creating booking or sending email:", error);
     return {
       success: false,
-      message: "An unexpected error occurred while saving your booking. Please try again later.",
+      message: "An unexpected error occurred. Please try again later.",
     };
   }
 }
