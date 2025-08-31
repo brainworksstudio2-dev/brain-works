@@ -1,12 +1,12 @@
 
 "use client";
 
-import { useFormState, useFormStatus } from "react-dom";
+import { useActionState, useEffect } from "react";
+import { useFormStatus } from "react-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { createBookingLink } from "./actions";
-import { useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -40,7 +40,7 @@ function SubmitButton() {
 
 export function BookingForm() {
   const { toast } = useToast();
-  const [state, formAction] = useFormState(createBookingLink, {
+  const [state, formAction] = useActionState(createBookingLink, {
     success: false,
     message: "",
   });

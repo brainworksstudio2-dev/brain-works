@@ -1,11 +1,11 @@
 
 "use client";
 
-import { useFormState, useFormStatus } from "react-dom";
+import { useActionState, useEffect } from "react";
+import { useFormStatus } from "react-dom";
 import { useFieldArray, useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { useEffect, useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
@@ -51,7 +51,7 @@ export function InvoiceForm() {
   const { user } = useAuth();
   const router = useRouter();
   
-  const [state, formAction] = useFormState(createInvoice, {
+  const [state, formAction] = useActionState(createInvoice, {
     success: false,
     message: "",
   });
