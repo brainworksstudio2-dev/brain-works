@@ -69,7 +69,7 @@ export async function createBooking(
 
     // Send confirmation email
     await resend.emails.send({
-      from: 'noreply@brainworks.dev',
+      from: 'BRAIN WORKS STUDIO',
       to: validatedFields.data.email,
       subject: 'Your Booking is Confirmed!',
       html: `
