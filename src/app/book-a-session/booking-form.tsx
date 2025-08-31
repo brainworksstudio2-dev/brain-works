@@ -14,7 +14,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { CalendarIcon, CheckCircle } from "lucide-react";
+import { CalendarIcon, CheckCircle, Copy } from "lucide-react";
 import { Calendar } from "@/components/ui/calendar";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
@@ -71,7 +71,6 @@ export function BookingForm() {
 
   const handleFormAction = (formData: FormData) => {
       const values = form.getValues();
-      // Format the date to 'yyyy-MM-dd' before sending to the server action
       if (values.eventDate) {
         formData.set('eventDate', format(values.eventDate, 'yyyy-MM-dd'));
       }
@@ -84,8 +83,29 @@ export function BookingForm() {
         <CardContent className="p-8 flex flex-col items-center justify-center text-center">
             <CheckCircle className="size-16 text-green-500 mb-4" />
             <h2 className="text-2xl font-bold mb-2">Booking Submitted!</h2>
-            <p className="text-muted-foreground mb-6">{state.message}</p>
-            <Button onClick={() => window.location.reload()} className="w-full">
+            <p className="text-muted-foreground mb-6 max-w-sm">{state.message}</p>
+            
+            {state.bookingCode && (
+              <div className="w-full max-w-xs mb-6">
+                  <p className="text-sm text-muted-foreground mb-2">Your Booking Code:</p>
+                  <div className="flex items-center justify-center p-3 font-mono text-lg bg-secondary rounded-lg border">
+                      <span>{state.bookingCode}</span>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="ml-2 h-8 w-8"
+                        onClick={() => {
+                          navigator.clipboard.writeText(state.bookingCode!);
+                          toast({ title: "Code copied to clipboard!" });
+                        }}
+                      >
+                          <Copy className="h-4 w-4" />
+                      </Button>
+                  </div>
+              </div>
+            )}
+
+            <Button onClick={() => window.location.reload()} className="w-full max-w-xs">
                 Make Another Booking
             </Button>
         </CardContent>

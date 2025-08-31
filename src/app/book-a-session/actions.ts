@@ -18,7 +18,19 @@ const BookingSchema = z.object({
 type State = {
   success: boolean;
   message: string;
+  bookingCode?: string;
 };
+
+// Function to generate a random alphanumeric code
+function generateBookingCode(): string {
+    const prefix = 'BW-';
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    let result = '';
+    for (let i = 0; i < 4; i++) {
+        result += characters.charAt(Math.floor(Math.random() * characters.length));
+    }
+    return prefix + result;
+}
 
 export async function createBooking(
   prevState: State,
@@ -35,10 +47,7 @@ export async function createBooking(
   });
   
   if (!validatedFields.success) {
-    // Log the detailed error for debugging
     console.error("Booking validation failed:", validatedFields.error.flatten().fieldErrors);
-    
-    // Create a more user-friendly error message
     const errorMessages = Object.values(validatedFields.error.flatten().fieldErrors).flat().join(' ');
     
     return {
@@ -48,10 +57,10 @@ export async function createBooking(
   }
 
   try {
-    // The data is already validated and in the correct format.
-    // We can add the server timestamp and status here.
+    const bookingCode = generateBookingCode();
     await addDoc(collection(db, "bookings"), {
       ...validatedFields.data,
+      bookingCode,
       createdAt: serverTimestamp(),
       status: 'Pending', // Default status for new client bookings
     });
@@ -59,6 +68,7 @@ export async function createBooking(
     return {
         success: true,
         message: "Your booking request has been submitted successfully! We will get back to you shortly.",
+        bookingCode: bookingCode,
     };
 
   } catch (error) {
