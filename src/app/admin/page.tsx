@@ -3,17 +3,21 @@
 
 import { useAuth } from "@/hooks/use-auth";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
-import { Loader } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Loader, ClipboardCopy } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { InvoiceForm } from "./invoice-form";
 import { Logo } from "@/components/logo";
-import { GenerateLinkForm } from "./generate-link-form";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { useToast } from "@/hooks/use-toast";
 
 export default function AdminPage() {
   const { user, isAdmin, loading } = useAuth();
   const router = useRouter();
+  const { toast } = useToast();
+  const [bookingLink, setBookingLink] = useState("");
 
   useEffect(() => {
     // If not loading and not an admin, redirect to home
@@ -21,6 +25,12 @@ export default function AdminPage() {
       router.replace("/");
     }
   }, [user, isAdmin, loading, router]);
+  
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      setBookingLink(`${window.location.origin}/book`);
+    }
+  }, [])
 
   // Set document title
   if (typeof window !== 'undefined') {
@@ -50,7 +60,7 @@ export default function AdminPage() {
           <Tabs defaultValue="create-invoice" className="w-full">
             <TabsList className="grid w-full grid-cols-3 mb-8">
               <TabsTrigger value="create-invoice">Create Invoice</TabsTrigger>
-              <TabsTrigger value="generate-link">Generate Booking Link</TabsTrigger>
+              <TabsTrigger value="generate-link">Booking Link</TabsTrigger>
               <TabsTrigger value="history">History</TabsTrigger>
             </TabsList>
             <TabsContent value="create-invoice">
@@ -67,11 +77,23 @@ export default function AdminPage() {
              <TabsContent value="generate-link">
               <Card>
                 <CardHeader>
-                  <CardTitle>Generate Booking Link</CardTitle>
-                  <CardDescription>Fill out the form to generate a unique booking link for a client.</CardDescription>
+                  <CardTitle>Share Booking Link</CardTitle>
+                  <CardDescription>Share this link with clients to allow them to book a session.</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <GenerateLinkForm />
+                    <div className="flex items-center space-x-2">
+                        <Input value={bookingLink} readOnly />
+                        <Button
+                        variant="outline"
+                        size="icon"
+                        onClick={() => {
+                            navigator.clipboard.writeText(bookingLink);
+                            toast({ title: "Copied to clipboard!" });
+                        }}
+                        >
+                        <ClipboardCopy className="h-4 w-4" />
+                        </Button>
+                    </div>
                 </CardContent>
               </Card>
             </TabsContent>
