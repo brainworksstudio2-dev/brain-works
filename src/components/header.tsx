@@ -3,6 +3,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Menu, LogOut, LogIn, Shield, User as UserIcon } from "lucide-react";
@@ -23,6 +24,7 @@ const navLinks = [
 export function Header() {
   const pathname = usePathname();
   const { user, signOut, loading, isAdmin } = useAuth();
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const AuthButton = () => {
     if (loading) {
@@ -83,14 +85,14 @@ export function Header() {
     }
     if (user) {
       return (
-        <Button onClick={signOut} size="lg" className="w-full">
+        <Button onClick={() => { signOut(); setIsMobileMenuOpen(false); }} size="lg" className="w-full">
           <LogOut className="mr-2" /> Logout
         </Button>
       );
     }
     return (
        <Button asChild size="lg" className="w-full">
-        <Link href="/login">
+        <Link href="/login" onClick={() => setIsMobileMenuOpen(false)}>
           <LogIn className="mr-2" /> Login
         </Link>
       </Button>
@@ -101,7 +103,7 @@ export function Header() {
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-20 items-center justify-between px-4 sm:px-6 lg:px-8">
         <div className="flex-1 md:flex-none">
-            <Link href="/">
+            <Link href="/" onClick={() => setIsMobileMenuOpen(false)}>
                 <Logo />
             </Link>
         </div>
@@ -129,7 +131,7 @@ export function Header() {
         </div>
 
         <div className="md:hidden flex items-center">
-          <Sheet>
+          <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
             <SheetTrigger asChild>
               <Button variant="ghost" size="icon">
                 <Menu className="h-6 w-6" />
@@ -138,7 +140,7 @@ export function Header() {
             </SheetTrigger>
             <SheetContent side="right" className="w-[300px]">
               <div className="flex flex-col gap-6 p-6">
-                <Link href="/">
+                <Link href="/" onClick={() => setIsMobileMenuOpen(false)}>
                   <Logo />
                 </Link>
                 <nav className="flex flex-col gap-4">
@@ -146,6 +148,7 @@ export function Header() {
                     <Link
                       key={link.href}
                       href={link.href}
+                      onClick={() => setIsMobileMenuOpen(false)}
                       className={cn(
                         "text-lg font-medium transition-colors hover:text-primary",
                         pathname === link.href ? "text-primary" : "text-muted-foreground"
@@ -157,6 +160,7 @@ export function Header() {
                    {isAdmin && (
                     <Link
                       href="/admin"
+                      onClick={() => setIsMobileMenuOpen(false)}
                       className={cn(
                         "text-lg font-medium transition-colors hover:text-primary flex items-center gap-1",
                         pathname === "/admin" ? "text-primary" : "text-muted-foreground"
@@ -167,7 +171,7 @@ export function Header() {
                   )}
                 </nav>
                 <Button asChild size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground">
-                  <Link href="/book-a-session">Book a Session</Link>
+                  <Link href="/book-a-session" onClick={() => setIsMobileMenuOpen(false)}>Book a Session</Link>
                 </Button>
                 <AuthButtonMobile />
               </div>
