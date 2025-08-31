@@ -3,7 +3,7 @@
 
 import { z } from "zod";
 import { format } from 'date-fns';
-import { db } from "@/lib/firebase.server";
+import { db } from "@/lib/server";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 
 const BookingSchema = z.object({

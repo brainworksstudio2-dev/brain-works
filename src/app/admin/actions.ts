@@ -2,7 +2,7 @@
 "use server";
 
 import { z } from "zod";
-import { db } from "@/lib/firebase.server";
+import { db } from "@/lib/server";
 import { collection, addDoc, serverTimestamp, doc, getDoc, setDoc } from "firebase/firestore";
 
 // INVOICE ACTIONS
