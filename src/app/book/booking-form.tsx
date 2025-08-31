@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useFormState, useFormStatus } from "react-dom";
@@ -13,12 +14,11 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { CalendarIcon, ClipboardCopy, Check } from "lucide-react";
+import { CalendarIcon, ClipboardCopy } from "lucide-react";
 import { Calendar } from "@/components/ui/calendar";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Checkbox } from "@/components/ui/checkbox";
 
 const formSchema = z.object({
   clientName: z.string().min(2, { message: "Name must be at least 2 characters." }),
@@ -27,7 +27,6 @@ const formSchema = z.object({
   serviceType: z.string({ required_error: "Please select a service type." }),
   eventDate: z.date({ required_error: "Please select a date for the event." }),
   message: z.string().max(500, "Message cannot exceed 500 characters.").optional(),
-  isReturningClient: z.boolean().default(false),
 });
 
 function SubmitButton() {
@@ -53,7 +52,6 @@ export function BookingForm() {
       email: "",
       phoneNumber: "",
       message: "",
-      isReturningClient: false,
     },
   });
 
@@ -72,7 +70,7 @@ export function BookingForm() {
       <Card>
         <CardHeader>
           <CardTitle>Booking Link Generated!</CardTitle>
-          <CardDescription>{state.confirmationMessage}</CardDescription>
+          <CardDescription>A confirmation has been sent to your email. Here is your unique link to view your booking details.</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="flex items-center space-x-2">
@@ -214,27 +212,6 @@ export function BookingForm() {
                 </FormItem>
               )}
             />
-            <FormField
-                control={form.control}
-                name="isReturningClient"
-                render={({ field }) => (
-                    <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 shadow-sm">
-                    <FormControl>
-                        <>
-                        <Checkbox
-                            checked={field.value}
-                            onCheckedChange={field.onChange}
-                        />
-                        <input type="hidden" name="isReturningClient" value={String(field.value)} />
-                        </>
-                    </FormControl>
-                    <div className="space-y-1 leading-none">
-                        <FormLabel>Are you a returning client?</FormLabel>
-                    </div>
-                    </FormItem>
-                )}
-            />
-            
             <SubmitButton />
           </form>
         </Form>

@@ -24,38 +24,30 @@ export function Header() {
 
   const AuthButton = () => {
     if (loading) {
-      return <Button variant="ghost" size="icon" disabled className="md:w-24 justify-start"></Button>;
+      return <Button variant="ghost" size="icon" disabled className="w-24 justify-start"></Button>;
     }
-    if (user) {
+    if (user && isAdmin) {
       return (
         <Button onClick={signOut} variant="ghost">
           <LogOut className="mr-2" /> Logout
         </Button>
       );
     }
-    return (
-      <Button asChild variant="ghost">
-        <Link href="/login"><LogIn className="mr-2" /> Login</Link>
-      </Button>
-    );
+    return null;
   };
   
   const AuthButtonMobile = () => {
     if (loading) {
         return <Button variant="ghost" size="lg" disabled className="w-full"></Button>;
     }
-    if (user) {
+    if (user && isAdmin) {
       return (
         <Button onClick={signOut} size="lg" className="w-full">
           <LogOut className="mr-2" /> Logout
         </Button>
       );
     }
-    return (
-      <Button asChild size="lg" className="w-full">
-        <Link href="/login"><LogIn className="mr-2" /> Login</Link>
-      </Button>
-    );
+    return null;
   }
 
   return (

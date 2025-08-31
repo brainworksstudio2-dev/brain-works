@@ -1,3 +1,4 @@
+
 "use server";
 
 import { z } from "zod";
@@ -5,13 +6,12 @@ import { generateBookingPageLink } from "@/ai/flows/generate-booking-page-link";
 import { format } from 'date-fns';
 
 const FormSchema = z.object({
-  clientName: z.string(),
+  clientName: z.string().min(1, "Client name is required."),
   email: z.string().email(),
-  phoneNumber: z.string(),
-  serviceType: z.string(),
+  phoneNumber: z.string().min(1, "Phone number is required."),
+  serviceType: z.string().min(1, "Service type is required."),
   eventDate: z.date(),
   message: z.string().optional(),
-  isReturningClient: z.boolean(),
 });
 
 type State = {
@@ -25,6 +25,8 @@ export async function createBookingLink(
   prevState: State,
   formData: FormData
 ): Promise<State> {
+  const isReturningClient = formData.get("isReturningClient") === "true";
+
   const validatedFields = FormSchema.safeParse({
     clientName: formData.get("clientName"),
     email: formData.get("email"),
@@ -32,10 +34,10 @@ export async function createBookingLink(
     serviceType: formData.get("serviceType"),
     eventDate: new Date(formData.get("eventDate") as string),
     message: formData.get("message") || undefined,
-    isReturningClient: formData.get("isReturningClient") === "true",
   });
   
   if (!validatedFields.success) {
+    console.error(validatedFields.error.flatten().fieldErrors);
     return {
       success: false,
       message: "Invalid form data. Please check your inputs.",
@@ -47,6 +49,7 @@ export async function createBookingLink(
   const aiPayload = {
     ...rest,
     eventDate: format(eventDate, 'yyyy-MM-dd'),
+    isReturningClient, // This will be false, but let's keep the AI happy
   };
 
   try {

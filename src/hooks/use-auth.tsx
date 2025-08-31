@@ -13,7 +13,6 @@ interface AuthContextType {
   loading: boolean;
   isAdmin: boolean;
   signInWithGoogle: () => Promise<void>;
-  createUserWithEmail: (email: string, pass: string, username: string, telephone: string, location: string) => Promise<void>;
   createAdminUserWithEmail: (email: string, pass: string, username: string, telephone: string, location: string) => Promise<void>;
   signInWithEmail: (email: string, pass: string) => Promise<void>;
   signOut: () => Promise<void>;
@@ -24,7 +23,6 @@ const AuthContext = createContext<AuthContextType>({
   loading: true,
   isAdmin: false,
   signInWithGoogle: async () => {},
-  createUserWithEmail: async () => {},
   createAdminUserWithEmail: async () => {},
   signInWithEmail: async () => {},
   signOut: async () => {},
@@ -62,7 +60,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     if (role === 'admin') {
       router.push("/admin");
     } else {
-      router.push("/book");
+      router.push("/");
     }
   };
 
@@ -81,57 +79,48 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     try {
       const result = await signInWithPopup(auth, provider);
       const user = result.user;
-      // Check if user exists in Firestore, if not, create them
       const userDocRef = doc(db, "users", user.uid);
       const userDoc = await getDoc(userDocRef);
-      if (!userDoc.exists()) {
-        await setDoc(userDocRef, {
-          uid: user.uid,
-          email: user.email,
-          username: user.displayName,
-          role: "client",
-          createdAt: new Date()
+      if (userDoc.exists() && userDoc.data().role === 'admin') {
+        handleAuthSuccess('admin');
+      } else {
+        // If not admin, sign them out as only admins can log in
+        await firebaseSignOut(auth);
+        toast({
+            variant: "destructive",
+            title: "Access Denied",
+            description: "Only administrators can log in.",
         });
       }
-      handleAuthSuccess('client');
     } catch (error) {
       handleAuthError(error);
     } finally {
         setLoading(false);
     }
   };
-
-  const createUser = async (email: string, pass: string, username: string, telephone: string, location: string, role: 'client' | 'admin') => {
+  
+  const createAdminUserWithEmail = async (email: string, pass: string, username: string, telephone: string, location: string) => {
     setLoading(true);
     try {
         const userCredential = await createUserWithEmailAndPassword(auth, email, pass);
         const user = userCredential.user;
         
-        // Save additional user info to Firestore
         await setDoc(doc(db, "users", user.uid), {
             uid: user.uid,
             email,
             username,
             telephone,
             location,
-            role: role,
+            role: "admin",
             createdAt: new Date(),
         });
 
-        handleAuthSuccess(role);
+        handleAuthSuccess("admin");
     } catch(error) {
         handleAuthError(error);
     } finally {
         setLoading(false);
     }
-  }
-  
-  const createUserWithEmail = (email: string, pass: string, username: string, telephone: string, location: string) => {
-    return createUser(email, pass, username, telephone, location, 'client');
-  }
-
-  const createAdminUserWithEmail = (email: string, pass: string, username: string, telephone: string, location: string) => {
-    return createUser(email, pass, username, telephone, location, 'admin');
   }
 
 
@@ -143,7 +132,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         const userDocRef = doc(db, "users", user.uid);
         const userDoc = await getDoc(userDocRef);
         const role = userDoc.exists() && userDoc.data().role === 'admin' ? 'admin' : 'client';
-        handleAuthSuccess(role);
+        if (role === 'admin') {
+            handleAuthSuccess(role);
+        } else {
+            await firebaseSignOut(auth);
+            toast({
+                variant: "destructive",
+                title: "Access Denied",
+                description: "Only administrators can log in.",
+            });
+        }
     } catch(error) {
         handleAuthError(error);
     } finally {
@@ -155,7 +153,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setLoading(true);
     try {
         await firebaseSignOut(auth);
-        router.push("/login");
+        router.push("/");
     } catch (error) {
         handleAuthError(error);
     } finally {
@@ -164,7 +162,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   return (
-    <AuthContext.Provider value={{ user, loading, isAdmin, signInWithGoogle, createUserWithEmail, createAdminUserWithEmail, signInWithEmail, signOut }}>
+    <AuthContext.Provider value={{ user, loading, isAdmin, signInWithGoogle, createAdminUserWithEmail, signInWithEmail, signOut }}>
       {children}
     </AuthContext.Provider>
   );
