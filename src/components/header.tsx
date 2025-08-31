@@ -60,18 +60,21 @@ export function Header() {
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container flex h-20 items-center justify-between px-4 md:px-6">
-        <Link href="/">
-          <Logo />
-        </Link>
-        <nav className="hidden md:flex items-center gap-8">
+      <div className="container flex h-20 items-center justify-between px-4 sm:px-6 lg:px-8">
+        <div className="flex-1 md:flex-none">
+            <Link href="/">
+                <Logo />
+            </Link>
+        </div>
+
+        <nav className="hidden md:flex flex-1 justify-center items-center gap-8">
           {navLinks.map((link) => (
             <Link
               key={link.href}
               href={link.href}
               className={cn(
-                "text-sm font-medium transition-colors hover:text-primary text-muted-foreground",
-                pathname === link.href && "text-primary"
+                "text-base font-medium transition-colors hover:text-primary",
+                pathname === link.href ? "text-primary" : "text-muted-foreground"
               )}
             >
               {link.label}
@@ -81,21 +84,23 @@ export function Header() {
             <Link
               href="/admin"
               className={cn(
-                "text-sm font-medium transition-colors hover:text-primary text-muted-foreground",
-                pathname === "/admin" && "text-primary"
+                "text-base font-medium transition-colors hover:text-primary flex items-center gap-1",
+                pathname === "/admin" ? "text-primary" : "text-muted-foreground"
               )}
             >
-              <span className="flex items-center gap-1"><Shield className="size-4" /> Admin</span>
+              <Shield className="size-4" /> Admin
             </Link>
           )}
         </nav>
-        <div className="hidden md:flex items-center gap-4">
+
+        <div className="hidden md:flex flex-1 justify-end items-center gap-4">
           <Button asChild className="bg-primary hover:bg-primary/90 text-primary-foreground">
             <Link href="/book">Book a Session</Link>
           </Button>
           <AuthButton />
         </div>
-        <div className="md:hidden">
+
+        <div className="md:hidden flex items-center">
           <Sheet>
             <SheetTrigger asChild>
               <Button variant="ghost" size="icon">
@@ -103,7 +108,7 @@ export function Header() {
                 <span className="sr-only">Toggle navigation menu</span>
               </Button>
             </SheetTrigger>
-            <SheetContent side="right">
+            <SheetContent side="right" className="w-[300px]">
               <div className="flex flex-col gap-6 p-6">
                 <Link href="/">
                   <Logo />
@@ -125,11 +130,11 @@ export function Header() {
                     <Link
                       href="/admin"
                       className={cn(
-                        "text-lg font-medium transition-colors hover:text-primary",
+                        "text-lg font-medium transition-colors hover:text-primary flex items-center gap-1",
                         pathname === "/admin" ? "text-primary" : "text-muted-foreground"
                       )}
                     >
-                     <span className="flex items-center gap-1"><Shield className="size-5" /> Admin</span>
+                     <Shield className="size-5" /> Admin
                     </Link>
                   )}
                 </nav>
