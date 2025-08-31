@@ -2,17 +2,16 @@
 "use server";
 
 import { z } from "zod";
-import { format } from 'date-fns';
 import { db } from "@/lib/server";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 
-// Updated schema to expect a string date
+// Updated schema to expect a string date in 'yyyy-MM-dd' format
 const BookingSchema = z.object({
   clientName: z.string().min(1, "Client name is required."),
-  email: z.string().email(),
+  email: z.string().email("A valid email is required."),
   phoneNumber: z.string().min(1, "Phone number is required."),
   serviceType: z.string().min(1, "Service type is required."),
-  eventDate: z.string().min(1, "Event date is required."), // Expecting 'YYYY-MM-DD' string
+  eventDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Invalid date format. Expected YYYY-MM-DD."),
   message: z.string().optional(),
 });
 
@@ -36,15 +35,21 @@ export async function createBooking(
   });
   
   if (!validatedFields.success) {
+    // Log the detailed error for debugging
     console.error("Booking validation failed:", validatedFields.error.flatten().fieldErrors);
+    
+    // Create a more user-friendly error message
+    const errorMessages = Object.values(validatedFields.error.flatten().fieldErrors).flat().join(' ');
+    
     return {
       success: false,
-      message: "Invalid form data. Please check your inputs.",
+      message: `Invalid form data: ${errorMessages || 'Please check your inputs.'}`,
     };
   }
 
   try {
     // The data is already validated and in the correct format.
+    // We can add the server timestamp and status here.
     await addDoc(collection(db, "bookings"), {
       ...validatedFields.data,
       createdAt: serverTimestamp(),
@@ -60,7 +65,7 @@ export async function createBooking(
     console.error("Error creating booking:", error);
     return {
       success: false,
-      message: "An unexpected error occurred. Please try again later.",
+      message: "An unexpected error occurred while saving your booking. Please try again later.",
     };
   }
 }
