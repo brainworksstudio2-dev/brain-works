@@ -12,6 +12,7 @@ import { cn } from "@/lib/utils";
 import { useAuth } from "@/hooks/use-auth";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "./ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
+import { Separator } from "./ui/separator";
 
 const navLinks = [
   { href: "/", label: "Home" },
@@ -79,24 +80,41 @@ export function Header() {
     );
   };
   
-  const AuthButtonMobile = () => {
+  const AuthMobile = () => {
     if (loading) {
-        return <Button variant="ghost" size="lg" disabled className="w-full"></Button>;
+      return (
+        <div className="w-full h-12"></div>
+      );
     }
     if (user) {
       return (
-        <Button onClick={() => { signOut(); setIsMobileMenuOpen(false); }} size="lg" className="w-full">
-          <LogOut className="mr-2" /> Logout
-        </Button>
-      );
+        <>
+          <div className="flex items-center gap-4">
+            <Avatar className="h-10 w-10">
+                <AvatarImage src={user.photoURL || ""} alt={user.displayName || "User"} />
+                <AvatarFallback>
+                    <UserIcon />
+                </AvatarFallback>
+            </Avatar>
+            <div className="flex-1">
+                <p className="text-sm font-medium leading-none">{user.displayName}</p>
+                <p className="text-xs leading-none text-muted-foreground">{user.email}</p>
+            </div>
+            <Button variant="ghost" size="icon" onClick={() => { signOut(); setIsMobileMenuOpen(false); }}>
+              <LogOut className="size-5" />
+            </Button>
+          </div>
+          <Separator />
+        </>
+      )
     }
     return (
-       <Button asChild size="lg" className="w-full">
+      <Button asChild size="lg" className="w-full">
         <Link href="/login" onClick={() => setIsMobileMenuOpen(false)}>
           <LogIn className="mr-2" /> Login
         </Link>
       </Button>
-    );
+    )
   }
 
   return (
@@ -143,6 +161,7 @@ export function Header() {
                 <Link href="/" onClick={() => setIsMobileMenuOpen(false)}>
                   <Logo />
                 </Link>
+
                 <nav className="flex flex-col gap-4">
                   {navLinks.map((link) => (
                     <Link
@@ -170,10 +189,14 @@ export function Header() {
                     </Link>
                   )}
                 </nav>
-                <Button asChild size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground">
-                  <Link href="/book-a-session" onClick={() => setIsMobileMenuOpen(false)}>Book a Session</Link>
-                </Button>
-                <AuthButtonMobile />
+                
+                <div className="flex flex-col gap-4 mt-auto">
+                    <Button asChild size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground">
+                      <Link href="/book-a-session" onClick={() => setIsMobileMenuOpen(false)}>Book a Session</Link>
+                    </Button>
+                    <Separator />
+                    <AuthMobile />
+                </div>
               </div>
             </SheetContent>
           </Sheet>
