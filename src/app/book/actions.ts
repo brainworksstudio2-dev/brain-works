@@ -2,10 +2,11 @@
 "use server";
 
 import { z } from "zod";
-import { generateBookingPageLink } from "@/ai/flows/generate-booking-page-link";
 import { format } from 'date-fns';
+import { db } from "@/lib/firebase.server";
+import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 
-const FormSchema = z.object({
+const BookingSchema = z.object({
   clientName: z.string().min(1, "Client name is required."),
   email: z.string().email(),
   phoneNumber: z.string().min(1, "Phone number is required."),
@@ -17,17 +18,14 @@ const FormSchema = z.object({
 type State = {
   success: boolean;
   message: string;
-  link?: string;
-  confirmationMessage?: string;
 };
 
-export async function createBookingLink(
+export async function createBooking(
   prevState: State,
   formData: FormData
 ): Promise<State> {
-  const isReturningClient = formData.get("isReturningClient") === "true";
 
-  const validatedFields = FormSchema.safeParse({
+  const validatedFields = BookingSchema.safeParse({
     clientName: formData.get("clientName"),
     email: formData.get("email"),
     phoneNumber: formData.get("phoneNumber"),
@@ -43,31 +41,22 @@ export async function createBookingLink(
       message: "Invalid form data. Please check your inputs.",
     };
   }
-  
-  const { eventDate, ...rest } = validatedFields.data;
-
-  const aiPayload = {
-    ...rest,
-    eventDate: format(eventDate, 'yyyy-MM-dd'),
-    isReturningClient, // This will be false, but let's keep the AI happy
-  };
 
   try {
-    const result = await generateBookingPageLink(aiPayload);
+    await addDoc(collection(db, "bookings"), {
+      ...validatedFields.data,
+      eventDate: format(validatedFields.data.eventDate, 'yyyy-MM-dd'),
+      createdAt: serverTimestamp(),
+      status: 'Pending', // Default status for new client bookings
+    });
     
-    if (result.bookingPageLink) {
-        return {
-            success: true,
-            message: "Booking link generated successfully!",
-            link: result.bookingPageLink,
-            confirmationMessage: result.confirmationMessage,
-        };
-    } else {
-        return { success: false, message: "AI failed to generate a link." };
-    }
+    return {
+        success: true,
+        message: "Your booking request has been submitted successfully! We will get back to you shortly.",
+    };
 
   } catch (error) {
-    console.error("Error generating booking link:", error);
+    console.error("Error creating booking:", error);
     return {
       success: false,
       message: "An unexpected error occurred. Please try again later.",

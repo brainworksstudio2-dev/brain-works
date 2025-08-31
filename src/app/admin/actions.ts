@@ -4,7 +4,11 @@
 import { z } from "zod";
 import { db } from "@/lib/firebase.server";
 import { collection, addDoc, serverTimestamp, doc, getDoc, setDoc } from "firebase/firestore";
+import { generateBookingPageLink } from "@/ai/flows/generate-booking-page-link";
+import { format } from 'date-fns';
 
+
+// INVOICE ACTIONS
 const InvoiceItemSchema = z.object({
   description: z.string().min(1, "Item description is required."),
   quantity: z.coerce.number().positive("Quantity must be positive."),
@@ -22,7 +26,7 @@ const InvoiceSchema = z.object({
   authorUid: z.string(),
 });
 
-type State = {
+type InvoiceState = {
   success: boolean;
   message: string;
   invoiceId?: string;
@@ -42,9 +46,9 @@ async function getNextInvoiceNumber() {
 }
 
 export async function createInvoice(
-  prevState: State,
+  prevState: InvoiceState,
   formData: FormData
-): Promise<State> {
+): Promise<InvoiceState> {
   const items = JSON.parse(formData.get("items") as string);
   
   const validatedFields = InvoiceSchema.safeParse({
@@ -99,3 +103,77 @@ export async function createInvoice(
     };
   }
 }
+
+
+// BOOKING LINK ACTIONS
+const GenerateLinkSchema = z.object({
+  clientName: z.string().min(1, "Client name is required."),
+  email: z.string().email(),
+  phoneNumber: z.string().min(1, "Phone number is required."),
+  serviceType: z.string().min(1, "Service type is required."),
+  eventDate: z.date(),
+  message: z.string().optional(),
+  isReturningClient: z.boolean().default(false),
+});
+
+type GenerateLinkState = {
+  success: boolean;
+  message: string;
+  link?: string;
+  confirmationMessage?: string;
+};
+
+export async function generateBookingLinkAction(
+  prevState: GenerateLinkState,
+  formData: FormData
+): Promise<GenerateLinkState> {
+  const isReturningClient = formData.get("isReturningClient") === "true";
+
+  const validatedFields = GenerateLinkSchema.safeParse({
+    clientName: formData.get("clientName"),
+    email: formData.get("email"),
+    phoneNumber: formData.get("phoneNumber"),
+    serviceType: formData.get("serviceType"),
+    eventDate: new Date(formData.get("eventDate") as string),
+    message: formData.get("message") || undefined,
+    isReturningClient: isReturningClient,
+  });
+  
+  if (!validatedFields.success) {
+    console.error(validatedFields.error.flatten().fieldErrors);
+    return {
+      success: false,
+      message: "Invalid form data. Please check your inputs.",
+    };
+  }
+  
+  const { eventDate, ...rest } = validatedFields.data;
+
+  const aiPayload = {
+    ...rest,
+    eventDate: format(eventDate, 'yyyy-MM-dd'),
+  };
+
+  try {
+    const result = await generateBookingPageLink(aiPayload);
+    
+    if (result.bookingPageLink) {
+        return {
+            success: true,
+            message: "Booking link generated successfully!",
+            link: result.bookingPageLink,
+            confirmationMessage: result.confirmationMessage,
+        };
+    } else {
+        return { success: false, message: "AI failed to generate a link." };
+    }
+
+  } catch (error) {
+    console.error("Error generating booking link:", error);
+    return {
+      success: false,
+      message: "An unexpected error occurred. Please try again later.",
+    };
+  }
+}
+

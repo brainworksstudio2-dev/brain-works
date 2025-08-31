@@ -6,15 +6,15 @@ import { useFormStatus } from "react-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { createBookingLink } from "./actions";
+import { createBooking } from "./actions";
 import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { CalendarIcon, ClipboardCopy } from "lucide-react";
+import { CalendarIcon, CheckCircle } from "lucide-react";
 import { Calendar } from "@/components/ui/calendar";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
@@ -33,14 +33,14 @@ function SubmitButton() {
   const { pending } = useFormStatus();
   return (
     <Button type="submit" disabled={pending} className="w-full">
-      {pending ? "Generating Link..." : "Generate Booking Link"}
+      {pending ? "Submitting Booking..." : "Submit Booking"}
     </Button>
   );
 }
 
 export function BookingForm() {
   const { toast } = useToast();
-  const [state, formAction] = useActionState(createBookingLink, {
+  const [state, formAction] = useActionState(createBooking, {
     success: false,
     message: "",
   });
@@ -68,27 +68,13 @@ export function BookingForm() {
   if (state.success) {
     return (
       <Card>
-        <CardHeader>
-          <CardTitle>Booking Link Generated!</CardTitle>
-          <CardDescription>A confirmation has been sent to your email. Here is your unique link to view your booking details.</CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="flex items-center space-x-2">
-            <Input value={state.link} readOnly />
-            <Button
-              variant="outline"
-              size="icon"
-              onClick={() => {
-                navigator.clipboard.writeText(state.link ?? "");
-                toast({ title: "Copied to clipboard!" });
-              }}
-            >
-              <ClipboardCopy className="h-4 w-4" />
+        <CardContent className="p-6 flex flex-col items-center justify-center text-center">
+            <CheckCircle className="size-16 text-green-500 mb-4" />
+            <h2 className="text-2xl font-bold mb-2">Booking Submitted!</h2>
+            <p className="text-muted-foreground mb-6">{state.message}</p>
+            <Button onClick={() => window.location.reload()} className="w-full">
+                Make Another Booking
             </Button>
-          </div>
-          <Button onClick={() => window.location.reload()} className="w-full">
-            Create Another Booking
-          </Button>
         </CardContent>
       </Card>
     );
