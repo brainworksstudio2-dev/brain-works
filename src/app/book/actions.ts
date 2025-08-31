@@ -11,7 +11,7 @@ const BookingSchema = z.object({
   email: z.string().email(),
   phoneNumber: z.string().min(1, "Phone number is required."),
   serviceType: z.string().min(1, "Service type is required."),
-  eventDate: z.date(),
+  eventDate: z.string().min(1, "Event date is required."), // Expect a string
   message: z.string().optional(),
 });
 
@@ -30,7 +30,7 @@ export async function createBooking(
     email: formData.get("email"),
     phoneNumber: formData.get("phoneNumber"),
     serviceType: formData.get("serviceType"),
-    eventDate: new Date(formData.get("eventDate") as string),
+    eventDate: formData.get("eventDate"), // Pass the string directly
     message: formData.get("message") || undefined,
   });
   
@@ -43,9 +43,10 @@ export async function createBooking(
   }
 
   try {
+    const { eventDate, ...restOfData } = validatedFields.data;
     await addDoc(collection(db, "bookings"), {
-      ...validatedFields.data,
-      eventDate: format(validatedFields.data.eventDate, 'yyyy-MM-dd'),
+      ...restOfData,
+      eventDate: format(new Date(eventDate), 'yyyy-MM-dd'), // Convert to Date and then format
       createdAt: serverTimestamp(),
       status: 'Pending', // Default status for new client bookings
     });

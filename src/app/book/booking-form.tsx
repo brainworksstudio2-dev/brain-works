@@ -91,7 +91,7 @@ export function BookingForm() {
             action={(formData) => {
               const values = form.getValues();
               if (values.eventDate) {
-                formData.append('eventDate', values.eventDate.toISOString());
+                formData.set('eventDate', values.eventDate.toISOString());
               }
               formAction(formData);
             }}
