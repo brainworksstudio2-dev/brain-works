@@ -1,3 +1,4 @@
+
 "use client";
 
 import Link from "next/link";
@@ -8,6 +9,7 @@ import { Menu, LogOut, LogIn, Shield } from "lucide-react";
 import { Logo } from "@/components/logo";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/hooks/use-auth";
+import { useEffect, useState } from "react";
 
 const navLinks = [
   { href: "/", label: "Home" },
@@ -20,6 +22,22 @@ const navLinks = [
 export function Header() {
   const pathname = usePathname();
   const { user, signOut, loading, isAdmin } = useAuth();
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  const isHomePage = pathname === "/";
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 10);
+    };
+
+    if (isHomePage) {
+      window.addEventListener("scroll", handleScroll);
+      return () => {
+        window.removeEventListener("scroll", handleScroll);
+      };
+    }
+  }, [isHomePage]);
 
   const AuthButton = () => {
     if (loading) {
@@ -58,7 +76,12 @@ export function Header() {
   }
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <header className={cn(
+      "sticky top-0 z-50 w-full transition-colors duration-300",
+      isHomePage && !isScrolled
+        ? "bg-transparent"
+        : "border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60"
+    )}>
       <div className="container flex h-16 items-center justify-between">
         <Link href="/">
           <Logo />
@@ -70,7 +93,9 @@ export function Header() {
               href={link.href}
               className={cn(
                 "text-sm font-medium transition-colors hover:text-primary",
-                pathname === link.href ? "text-primary" : "text-muted-foreground"
+                isHomePage && !isScrolled ? "text-white hover:text-white/80" : "text-muted-foreground",
+                pathname === link.href && !isHomePage ? "text-primary" : "",
+                pathname === link.href && isHomePage && isScrolled ? "text-primary" : ""
               )}
             >
               {link.label}
@@ -81,7 +106,8 @@ export function Header() {
               href="/admin"
               className={cn(
                 "text-sm font-medium transition-colors hover:text-primary",
-                pathname === "/admin" ? "text-primary" : "text-muted-foreground"
+                isHomePage && !isScrolled ? "text-white hover:text-white/80" : "text-muted-foreground",
+                pathname === "/admin" ? "text-primary" : ""
               )}
             >
               <span className="flex items-center gap-1"><Shield className="size-4" /> Admin</span>
