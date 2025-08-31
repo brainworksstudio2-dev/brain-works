@@ -26,28 +26,40 @@ export function Header() {
     if (loading) {
       return <Button variant="ghost" size="icon" disabled className="w-24 justify-start"></Button>;
     }
-    if (user && isAdmin) {
+    if (user) {
       return (
         <Button onClick={signOut} variant="ghost">
           <LogOut className="mr-2" /> Logout
         </Button>
       );
     }
-    return null;
+    return (
+      <Button asChild variant="ghost">
+        <Link href="/login">
+          <LogIn className="mr-2" /> Login
+        </Link>
+      </Button>
+    );
   };
   
   const AuthButtonMobile = () => {
     if (loading) {
         return <Button variant="ghost" size="lg" disabled className="w-full"></Button>;
     }
-    if (user && isAdmin) {
+    if (user) {
       return (
         <Button onClick={signOut} size="lg" className="w-full">
           <LogOut className="mr-2" /> Logout
         </Button>
       );
     }
-    return null;
+    return (
+       <Button asChild size="lg" className="w-full">
+        <Link href="/login">
+          <LogIn className="mr-2" /> Login
+        </Link>
+      </Button>
+    );
   }
 
   return (
@@ -87,7 +99,7 @@ export function Header() {
 
         <div className="hidden md:flex flex-1 justify-end items-center gap-4">
           <Button asChild className="bg-primary hover:bg-primary/90 text-primary-foreground">
-            <Link href="/book">Book a Session</Link>
+            <Link href="/book-a-session">Book a Session</Link>
           </Button>
           <AuthButton />
         </div>
@@ -131,7 +143,7 @@ export function Header() {
                   )}
                 </nav>
                 <Button asChild size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground">
-                  <Link href="/book">Book a Session</Link>
+                  <Link href="/book-a-session">Book a Session</Link>
                 </Button>
                 <AuthButtonMobile />
               </div>

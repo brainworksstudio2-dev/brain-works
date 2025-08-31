@@ -28,7 +28,7 @@ export default function AdminPage() {
   
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      setBookingLink(`${window.location.origin}/book`);
+      setBookingLink(`${window.location.origin}/book-a-session`);
     }
   }, [])
 

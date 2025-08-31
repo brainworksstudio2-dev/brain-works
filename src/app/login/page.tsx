@@ -6,7 +6,7 @@ import { LoginForm } from "./login-form";
 export default function LoginPage() {
     // Set document title
     if (typeof window !== 'undefined') {
-        document.title = "Admin Login - Brain Works";
+        document.title = "Sign In - Brain Works";
     }
 
     return (
@@ -15,10 +15,10 @@ export default function LoginPage() {
                 <div className="max-w-md mx-auto">
                     <div className="text-center mb-8">
                         <h1 className="text-4xl md:text-5xl font-bold text-primary">
-                            Admin Sign In
+                            Sign In
                         </h1>
                         <p className="text-lg text-muted-foreground mt-4">
-                            Please enter your administrator credentials.
+                            Sign in with Google to book a session, or use your administrator credentials.
                         </p>
                     </div>
                     <LoginForm />

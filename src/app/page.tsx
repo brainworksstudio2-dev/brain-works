@@ -1,3 +1,4 @@
+
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
@@ -68,7 +69,7 @@ export default function Home() {
           <p className="mt-4 text-lg md:text-xl max-w-2xl">Capturing Life's Moments, One Frame at a Time.</p>
           <div className="mt-8 flex flex-col sm:flex-row gap-4">
             <Button asChild size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground">
-              <Link href="/book">Book a Session</Link>
+              <Link href="/book-a-session">Book a Session</Link>
             </Button>
             <Button asChild size="lg" variant="outline" className="border-accent text-accent hover:bg-accent hover:text-accent-foreground">
               <Link href="/portfolio">View Portfolio</Link>

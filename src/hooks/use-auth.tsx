@@ -4,7 +4,7 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { User, onAuthStateChanged, signOut as firebaseSignOut, GoogleAuthProvider, signInWithPopup, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
 import { auth, db } from "@/lib/client";
-import { doc, setDoc, getDoc } from "firebase/firestore";
+import { doc, setDoc, getDoc, serverTimestamp } from "firebase/firestore";
 import { useRouter } from "next/navigation";
 import { useToast } from "./use-toast";
 
@@ -81,16 +81,25 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       const user = result.user;
       const userDocRef = doc(db, "users", user.uid);
       const userDoc = await getDoc(userDocRef);
-      if (userDoc.exists() && userDoc.data().role === 'admin') {
-        handleAuthSuccess('admin');
+
+      if (userDoc.exists()) {
+        // User exists, just sign them in
+        const userData = userDoc.data();
+        handleAuthSuccess(userData.role);
       } else {
-        // If not admin, sign them out as only admins can log in
-        await firebaseSignOut(auth);
-        toast({
-            variant: "destructive",
-            title: "Access Denied",
-            description: "Only administrators can log in.",
+        // New user, create a client account for them
+        await setDoc(userDocRef, {
+            uid: user.uid,
+            email: user.email,
+            username: user.displayName,
+            role: "client",
+            createdAt: serverTimestamp(),
         });
+        toast({
+            title: "Account Created!",
+            description: "Thank you for joining Brain Works!",
+        });
+        handleAuthSuccess("client");
       }
     } catch (error) {
       handleAuthError(error);
@@ -123,7 +132,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   }
 
-
   const signInWithEmail = async (email: string, pass: string) => {
     setLoading(true);
     try {
@@ -139,7 +147,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             toast({
                 variant: "destructive",
                 title: "Access Denied",
-                description: "Only administrators can log in.",
+                description: "Only administrators can log in via this method.",
             });
         }
     } catch(error) {
