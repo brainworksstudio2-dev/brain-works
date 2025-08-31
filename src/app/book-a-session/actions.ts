@@ -6,12 +6,13 @@ import { format } from 'date-fns';
 import { db } from "@/lib/server";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 
+// Updated schema to expect a string date
 const BookingSchema = z.object({
   clientName: z.string().min(1, "Client name is required."),
   email: z.string().email(),
   phoneNumber: z.string().min(1, "Phone number is required."),
   serviceType: z.string().min(1, "Service type is required."),
-  eventDate: z.string().min(1, "Event date is required."), // Expect a string
+  eventDate: z.string().min(1, "Event date is required."), // Expecting 'YYYY-MM-DD' string
   message: z.string().optional(),
 });
 
@@ -30,12 +31,12 @@ export async function createBooking(
     email: formData.get("email"),
     phoneNumber: formData.get("phoneNumber"),
     serviceType: formData.get("serviceType"),
-    eventDate: formData.get("eventDate"), // Pass the string directly
+    eventDate: formData.get("eventDate"),
     message: formData.get("message") || undefined,
   });
   
   if (!validatedFields.success) {
-    console.error(validatedFields.error.flatten().fieldErrors);
+    console.error("Booking validation failed:", validatedFields.error.flatten().fieldErrors);
     return {
       success: false,
       message: "Invalid form data. Please check your inputs.",
@@ -43,10 +44,9 @@ export async function createBooking(
   }
 
   try {
-    const { eventDate, ...restOfData } = validatedFields.data;
+    // The data is already validated and in the correct format.
     await addDoc(collection(db, "bookings"), {
-      ...restOfData,
-      eventDate: format(new Date(eventDate), 'yyyy-MM-dd'), // Convert to Date and then format
+      ...validatedFields.data,
       createdAt: serverTimestamp(),
       status: 'Pending', // Default status for new client bookings
     });

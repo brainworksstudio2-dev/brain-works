@@ -90,8 +90,9 @@ export function BookingForm() {
           <form 
             action={(formData) => {
               const values = form.getValues();
+              // Format the date to 'yyyy-MM-dd' before sending to the server action
               if (values.eventDate) {
-                formData.set('eventDate', values.eventDate.toISOString());
+                formData.set('eventDate', format(values.eventDate, 'yyyy-MM-dd'));
               }
               formAction(formData);
             }}
