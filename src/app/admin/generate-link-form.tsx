@@ -57,6 +57,17 @@ export function GenerateLinkForm() {
       isReturningClient: false,
     },
   });
+  
+  useEffect(() => {
+    if (state.message && !state.success) {
+        toast({
+            title: "Error",
+            description: state.message,
+            variant: "destructive"
+        })
+    }
+  }, [state, toast])
+
 
   if (state.success && state.link) {
     return (
@@ -89,9 +100,13 @@ export function GenerateLinkForm() {
     <Form {...form}>
       <form
         action={(formData) => {
+            const values = form.getValues();
             // Manually append checkbox value
-            const isReturning = form.getValues('isReturningClient');
-            formData.append('isReturningClient', isReturning ? 'true' : 'false');
+            formData.append('isReturningClient', values.isReturningClient ? 'true' : 'false');
+            // Manually append date value
+            if (values.eventDate) {
+                formData.append('eventDate', values.eventDate.toISOString());
+            }
             formAction(formData);
         }}
         className="space-y-6"
@@ -191,7 +206,6 @@ export function GenerateLinkForm() {
                 </PopoverContent>
               </Popover>
               <FormMessage />
-              {field.value && <input type="hidden" name="eventDate" value={field.value.toISOString()} />}
             </FormItem>
           )}
         />
