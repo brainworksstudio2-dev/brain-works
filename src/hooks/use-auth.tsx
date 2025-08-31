@@ -92,6 +92,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             uid: user.uid,
             email: user.email,
             username: user.displayName,
+            photoURL: user.photoURL,
             role: "client",
             createdAt: serverTimestamp(),
         });
