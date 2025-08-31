@@ -1,3 +1,4 @@
+
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Camera, Video, Users, Building, PartyPopper, Image as ImageIcon } from "lucide-react";
 import Image from "next/image";
@@ -13,37 +14,37 @@ const services = [
     icon: <Camera className="size-10 text-primary" />,
     title: "Wedding Photography",
     description: "Capturing the magic of your special day with timeless photos you'll cherish forever.",
-    image: { src: "https://placehold.co/600x400.png", alt: "Wedding photography example", dataAiHint: "bride groom" },
+    image: { src: "https://picsum.photos/seed/s1/600/400", alt: "Wedding photography example", dataAiHint: "bride groom" },
   },
   {
     icon: <Video className="size-10 text-primary" />,
     title: "Event Videography",
     description: "From corporate events to personal celebrations, we create cinematic videos that tell your story.",
-    image: { src: "https://placehold.co/600x400.png", alt: "Event videography example", dataAiHint: "event videography" },
+    image: { src: "https://picsum.photos/seed/s2/600/400", alt: "Event videography example", dataAiHint: "event videography" },
   },
   {
     icon: <Users className="size-10 text-primary" />,
     title: "Portrait Sessions",
     description: "Professional headshots, family portraits, or creative solo sessions to capture your essence.",
-    image: { src: "https://placehold.co/600x400.png", alt: "Portrait session example", dataAiHint: "portrait photography" },
+    image: { src: "https://picsum.photos/seed/s3/600/400", alt: "Portrait session example", dataAiHint: "portrait photography" },
   },
   {
     icon: <Building className="size-10 text-primary" />,
     title: "Corporate Shoots",
     description: "High-quality visuals for your brand, including product photography, office lifestyle, and team photos.",
-    image: { src: "https://placehold.co/600x400.png", alt: "Corporate shoot example", dataAiHint: "corporate office" },
+    image: { src: "https://picsum.photos/seed/s4/600/400", alt: "Corporate shoot example", dataAiHint: "corporate office" },
   },
   {
     icon: <PartyPopper className="size-10 text-primary" />,
     title: "Special Events",
     description: "Concerts, parties, and other special occasions documented with energy and creativity.",
-    image: { src: "https://placehold.co/600x400.png", alt: "Special event example", dataAiHint: "concert party" },
+    image: { src: "https://picsum.photos/seed/s5/600/400", alt: "Special event example", dataAiHint: "concert party" },
   },
   {
     icon: <ImageIcon className="size-10 text-primary" />,
     title: "Studio Shoots",
     description: "Controlled environment for perfect product shots, fashion photography, and more.",
-    image: { src: "https://placehold.co/600x400.png", alt: "Studio shoot example", dataAiHint: "photo studio" },
+    image: { src: "https://picsum.photos/seed/s6/600/400", alt: "Studio shoot example", dataAiHint: "photo studio" },
   },
 ];
 

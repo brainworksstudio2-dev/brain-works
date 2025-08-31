@@ -1,3 +1,4 @@
+
 import Image from "next/image";
 import type { Metadata } from "next";
 import { Users, Camera, Heart } from "lucide-react";
@@ -11,14 +12,14 @@ const teamMembers = [
     {
         name: "Jane Doe",
         role: "Lead Photographer",
-        image: "https://placehold.co/400x400.png",
+        image: "https://picsum.photos/400/400",
         dataAiHint: "female photographer",
         bio: "With over a decade of experience, Jane has a keen eye for capturing the decisive moment, turning fleeting expressions into timeless art.",
     },
     {
         name: "John Smith",
         role: "Lead Videographer",
-        image: "https://placehold.co/400x400.png",
+        image: "https://picsum.photos/400/400",
         dataAiHint: "male videographer",
         bio: "John is a master storyteller, weaving narratives through compelling cinematography that brings every event to life.",
     },
@@ -36,7 +37,7 @@ export default function AboutPage() {
                 </div>
 
                 <div className="relative mb-16">
-                    <Image src="https://placehold.co/1200x600.png" alt="Brain Works team working" data-ai-hint="photography team" width={1200} height={600} className="w-full h-auto rounded-lg shadow-lg" />
+                    <Image src="https://picsum.photos/1200/600" alt="Brain Works team working" data-ai-hint="photography team" width={1200} height={600} className="w-full h-auto rounded-lg shadow-lg" />
                     <div className="absolute inset-0 bg-black/30 rounded-lg"></div>
                 </div>
 

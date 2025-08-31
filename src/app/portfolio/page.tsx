@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from "react";
@@ -8,28 +9,28 @@ import { Card, CardContent } from "@/components/ui/card";
 
 const portfolioData = {
   weddings: [
-    { src: "https://placehold.co/600x800.png", alt: "Wedding couple smiling", dataAiHint: "wedding couple" },
-    { src: "https://placehold.co/800x600.png", alt: "Wedding ceremony", dataAiHint: "wedding ceremony" },
-    { src: "https://placehold.co/600x800.png", alt: "Bride posing", dataAiHint: "bride portrait" },
-    { src: "https://placehold.co/800x600.png", alt: "Wedding reception dance", dataAiHint: "wedding reception" },
+    { src: "https://picsum.photos/seed/w1/600/800", alt: "Wedding couple smiling", dataAiHint: "wedding couple" },
+    { src: "https://picsum.photos/seed/w2/800/600", alt: "Wedding ceremony", dataAiHint: "wedding ceremony" },
+    { src: "https://picsum.photos/seed/w3/600/800", alt: "Bride posing", dataAiHint: "bride portrait" },
+    { src: "https://picsum.photos/seed/w4/800/600", alt: "Wedding reception dance", dataAiHint: "wedding reception" },
   ],
   events: [
-    { src: "https://placehold.co/800x600.png", alt: "Corporate conference", dataAiHint: "corporate conference" },
-    { src: "https://placehold.co/600x800.png", alt: "Speaker on stage", dataAiHint: "public speaker" },
-    { src: "https://placehold.co/800x600.png", alt: "Networking at an event", dataAiHint: "business networking" },
-    { src: "https://placehold.co/600x800.png", alt: "Birthday party celebration", dataAiHint: "birthday party" },
+    { src: "https://picsum.photos/seed/e1/800/600", alt: "Corporate conference", dataAiHint: "corporate conference" },
+    { src: "https://picsum.photos/seed/e2/600/800", alt: "Speaker on stage", dataAiHint: "public speaker" },
+    { src: "https://picsum.photos/seed/e3/800/600", alt: "Networking at an event", dataAiHint: "business networking" },
+    { src: "https://picsum.photos/seed/e4/600/800", alt: "Birthday party celebration", dataAiHint: "birthday party" },
   ],
   portraits: [
-    { src: "https://placehold.co/600x800.png", alt: "Professional headshot", dataAiHint: "professional headshot" },
-    { src: "https://placehold.co/800x600.png", alt: "Family portrait outdoors", dataAiHint: "family portrait" },
-    { src: "https://placehold.co/600x800.png", alt: "Creative artist portrait", dataAiHint: "artist portrait" },
-    { src: "https://placehold.co/600x800.png", alt: "Child portrait", dataAiHint: "child portrait" },
+    { src: "https://picsum.photos/seed/po1/600/800", alt: "Professional headshot", dataAiHint: "professional headshot" },
+    { src: "https://picsum.photos/seed/po2/800/600", alt: "Family portrait outdoors", dataAiHint: "family portrait" },
+    { src: "https://picsum.photos/seed/po3/600/800", alt: "Creative artist portrait", dataAiHint: "artist portrait" },
+    { src: "https://picsum.photos/seed/po4/600/800", alt: "Child portrait", dataAiHint: "child portrait" },
   ],
   corporate: [
-    { src: "https://placehold.co/800x600.png", alt: "Modern office space", dataAiHint: "modern office" },
-    { src: "https://placehold.co/800x600.png", alt: "Team meeting in a boardroom", dataAiHint: "team meeting" },
-    { src: "https://placehold.co/600x800.png", alt: "Executive portrait", dataAiHint: "ceo portrait" },
-    { src: "https://placehold.co/800x600.png", alt: "Product photography setup", dataAiHint: "product photography" },
+    { src: "https://picsum.photos/seed/c1/800/600", alt: "Modern office space", dataAiHint: "modern office" },
+    { src: "https://picsum.photos/seed/c2/800/600", alt: "Team meeting in a boardroom", dataAiHint: "team meeting" },
+    { src: "https://picsum.photos/seed/c3/600/800", alt: "Executive portrait", dataAiHint: "ceo portrait" },
+    { src: "https://picsum.photos/seed/c4/800/600", alt: "Product photography setup", dataAiHint: "product photography" },
   ],
 };
 

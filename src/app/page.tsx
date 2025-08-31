@@ -7,9 +7,9 @@ import Image from "next/image";
 import Link from "next/link";
 
 const heroImages = [
-  { src: "https://placehold.co/1920x1080.png", alt: "Stunning wedding photograph", dataAiHint: "wedding photography" },
-  { src: "https://placehold.co/1920x1080.png", alt: "Dynamic event photography", dataAiHint: "event photography" },
-  { src: "https://placehold.co/1920x1080.png", alt: "Professional corporate headshot", dataAiHint: "corporate portrait" },
+  { src: "https://picsum.photos/seed/h1/1920/1080", alt: "Stunning wedding photograph", dataAiHint: "wedding photography" },
+  { src: "https://picsum.photos/seed/h2/1920/1080", alt: "Dynamic event photography", dataAiHint: "event photography" },
+  { src: "https://picsum.photos/seed/h3/1920/1080", alt: "Professional corporate headshot", dataAiHint: "corporate portrait" },
 ];
 
 const services = [
@@ -36,10 +36,10 @@ const services = [
 ];
 
 const portfolioImages = [
-    { src: "https://placehold.co/600x400.png", alt: "Wedding photo", category: "Weddings", dataAiHint: "wedding couple" },
-    { src: "https://placehold.co/600x400.png", alt: "Event photo", category: "Events", dataAiHint: "conference event" },
-    { src: "https://placehold.co/600x400.png", alt: "Portrait photo", category: "Portraits", dataAiHint: "professional headshot" },
-    { src: "https://placehold.co/600x400.png", alt: "Corporate photo", category: "Corporate", dataAiHint: "office meeting" },
+    { src: "https://picsum.photos/seed/p1/600/400", alt: "Wedding photo", category: "Weddings", dataAiHint: "wedding couple" },
+    { src: "https://picsum.photos/seed/p2/600/400", alt: "Event photo", category: "Events", dataAiHint: "conference event" },
+    { src: "https://picsum.photos/seed/p3/600/400", alt: "Portrait photo", category: "Portraits", dataAiHint: "professional headshot" },
+    { src: "https://picsum.photos/seed/p4/600/400", alt: "Corporate photo", category: "Corporate", dataAiHint: "office meeting" },
 ];
 
 export default function Home() {
