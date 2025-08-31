@@ -63,7 +63,10 @@ export function BookingForm() {
         description: state.message,
       });
     }
-  }, [state, toast]);
+    if (state.success) {
+      form.reset();
+    }
+  }, [state, toast, form]);
 
   if (state.success) {
     return (
@@ -84,7 +87,16 @@ export function BookingForm() {
     <Card>
       <CardContent className="p-6">
         <Form {...form}>
-          <form action={formAction} className="space-y-6">
+          <form 
+            action={(formData) => {
+              const values = form.getValues();
+              if (values.eventDate) {
+                formData.append('eventDate', values.eventDate.toISOString());
+              }
+              formAction(formData);
+            }}
+            className="space-y-6"
+          >
             <FormField
               control={form.control}
               name="clientName"
@@ -181,7 +193,6 @@ export function BookingForm() {
                     </PopoverContent>
                   </Popover>
                   <FormMessage />
-                  {field.value && <input type="hidden" name="eventDate" value={field.value.toISOString()} />}
                 </FormItem>
               )}
             />
